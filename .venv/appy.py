@@ -1,8 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 import subprocess
-from importlib_resources import files
-
-data_path = files('example').joinpath('data/data_file')
+from importlib_metadata import version, PackageNotFoundError
 
 app = Flask(__name__)
 
@@ -29,14 +27,11 @@ def run_code():
     }
     return jsonify(response), 400 if error else 200
 
-def check_library(library_name):
+def check_library(library_name):  # <--- function rewritten
     try:
-        dist = pkg_resources.get_distribution(library_name)
-        print(f"{library_name} version {dist.version} is already installed.")
-        return True
-    except pkg_resources.DistributionNotFound:
-        print(f"{library_name} is not installed.")
-        return False
+        return version(library_name)
+    except PackageNotFoundError:
+        return None
 
 def install_library(library_name):
     if not check_library(library_name):
