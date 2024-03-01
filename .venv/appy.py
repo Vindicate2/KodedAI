@@ -1,6 +1,14 @@
-from flask import Flask
+from flask import Flask, render_template, request, jsonify
+import subprocess
+from importlib_resources import files
+
+data_path = files('example').joinpath('data/data_file')
 
 app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return render_template('home.html')
 
 @app.route('/run-code', methods=['POST'])
 def run_code():
@@ -15,17 +23,11 @@ def run_code():
     output, error = process.communicate()
 
     # Return the output as a JSON response
-    return jsonify({'output': output.decode('utf-8'), 'error': error.decode('utf-8')})
-
-from importlib_metadata import version, PackageNotFoundError
-
-def get_package_version(package_name):
-    try:
-        return version(package_name)
-    except PackageNotFoundError:
-        return f'No package metadata was found for {package_name}'
-
-print(get_package_version("my_package"))
+    response = {
+        'output': output.decode('utf-8'),
+        'error': error.decode('utf-8') if error else None
+    }
+    return jsonify(response), 400 if error else 200
 
 def check_library(library_name):
     try:
@@ -36,37 +38,13 @@ def check_library(library_name):
         print(f"{library_name} is not installed.")
         return False
 
-import subprocess
-
 def install_library(library_name):
-    try:
-        subprocess.check_call(["pip", "install", library_name])
-        print(f"{library_name} has been successfully installed.")
-        return True
-    except subprocess.CalledProcessError:
-        print(f"Installation of {library_name} failed.")
-        return False
-
-def download_library(library_name):
     if not check_library(library_name):
-        install_library(library_name)
-
-        if __name__ == '__main__':
-            app.run(debug=True)
-
-# Importing flask module in the project
-from flask import Flask
-
-# Initialising the flask app with the name 'app'
-app = Flask(__name__)
-
-from flask import Flask, render_template
-
-app = Flask(__name__)
-
-@app.route('/')
-def home():
-    return render_template('home.html')
+        try:
+            subprocess.check_call(["pip", "install", library_name])
+            print(f"{library_name} has been successfully installed.")
+        except subprocess.CalledProcessError:
+            print(f"Installation of {library_name} failed.")
 
 if __name__ == '__main__':
     app.run(debug=True)
