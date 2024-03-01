@@ -60,11 +60,11 @@ from flask import Flask
 # Initialising the flask app with the name 'app'
 app = Flask(__name__)
 
-# Defining a route
+from flask import render_template
+
 @app.route('/')
-# Function that will complete this endpoint
 def home():
-    return "Hello, World!"
+    return render_template('index.html')
 
 # Main driver function
 if __name__ == '__main__':
