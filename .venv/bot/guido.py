@@ -2,18 +2,15 @@
 
 class Guido:
     def __init__(self):
-        pass
+        self.tutorials = {
+            "python": "Visit python.org to start learning Python.",
+            "flask": "Check out the Flask Mega-Tutorial on Miguel Grinberg's blog."
+        }
 
-    def guide_user(self):
-        # Implement logic for guiding the user.
-        return "Guidance functionality not implemented yet."
+    def provide_guidance(self, topic):
+        return self.tutorials.get(topic, "I can't find a tutorial on that subject.")
 
-# Add more methods as needed for Guido's guidance capabilities.
+    def list_topics(self):
+        # Provide a list of available tutorial topics
+        return "I can provide guidance on the following topics: " + ", ".join(self.tutorials.keys())
 
-def get_help(topic):
-    help_topics = {
-        'navigation': 'Here’s how to navigate the website...',
-        'usage': 'You can interact with Koded by...',
-        # Add more topics
-    }
-    return help_topics.get(topic, 'Sorry, help topic not found.')

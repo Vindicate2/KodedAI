@@ -1,0 +1,8 @@
+import autopep8
+
+def fix_python_code(code):
+    # Use autopep8 to fix the code
+    fixed_code = autopep8.fix_code(code)
+
+    # Return the fixed code
+    return fixed_code
