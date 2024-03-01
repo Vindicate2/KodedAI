@@ -43,3 +43,16 @@ def install_library(library_name):
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+    from flask import Flask, send_from_directory
+
+    app = Flask(__name__, static_url_path='/bot/static')
+
+
+    @app.route('/bot/static/<path:path>')
+    def send_static(path):
+        return send_from_directory('static', path)
+
+
+    if __name__ == "__main__":
+        app.run(debug=True)
