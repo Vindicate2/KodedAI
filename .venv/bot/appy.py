@@ -9,7 +9,7 @@ app = Flask(__name__, static_url_path='/bot/static')
 # Define route to send static files
 @app.route('/bot/static/<path:path>')
 def send_static(path):
-    return send_from_directory('static', path)
+    return send_from_directory('../static', path)
 
 # Define route to run code
 @app.route('/run-code', methods=['POST'])
